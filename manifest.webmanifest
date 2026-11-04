@@ -1,7 +1,7 @@
 {
-  "name": "XI RPL 2 — SMKN 1 Rembang",
-  "short_name": "XI RPL 2",
-  "description": "Website resmi kelas XI Rekayasa Perangkat Lunak 2, SMKN 1 Rembang.",
+  "name": "XII TKJ 1 — SMK ASTRINDO",
+  "short_name": "XII TKJ 1",
+  "description": "Website resmi kelas XII Rekayasa Perangkat Lunak 2, SMK ASTRINDO.",
   "start_url": "./",
   "display": "standalone",
   "background_color": "#faf9f6",
