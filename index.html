@@ -16,7 +16,82 @@
   <link rel="modulepreload" crossorigin href="./assets/react-vendor-DI_0hgQA.js">
   <link rel="stylesheet" crossorigin href="./assets/index-D6eaiWy-.css">
 <style>th:nth-child(11), td:nth-child(11) { display: none !important; }</style>
+
+  <style>
+    /* Menyembunyikan section CTA "Mau kolaborasi" secara total */
+    section:has(> div > div.rounded-3xl.bg-card) {
+      display: none !important;
+    }
+  </style>
+
+  
+
+  <style>
+    form.rounded-2xl.bg-card { display: none !important; }
+  </style>
+
+
+
+  
+
+
+  
+
+  
+
+
+  <style>
+    /* Sembunyikan form input */
+    .mt-12.grid.gap-8 > div:nth-child(2) form {
+      display: none !important;
+    }
+    
+    /* Kunci kolom kanan agar tetap punya tinggi dan posisi rata tengah */
+    .mt-12.grid.gap-8 > div:nth-child(2) {
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      min-height: 400px !important;
+    }
+  </style>
+
+  <script>
+    window.addEventListener('load', function() {
+      setTimeout(function() {
+        // Cari foto di bagian atas
+        const heroImage = document.querySelector('.relative.mx-auto.w-full.max-w-md');
+        // Cari pembungkus grid kontak
+        const contactGrid = document.querySelector('.mt-12.grid.gap-8');
+        
+        if (heroImage && contactGrid) {
+          // Ambil anak kedua (kolom kanan)
+          const rightCol = contactGrid.children[1];
+          
+          if (rightCol && !rightCol.querySelector('.foto-kontak-clone')) {
+            // Sembunyikan form
+            const form = rightCol.querySelector('form');
+            if (form) form.style.display = 'none';
+            
+            // Clone fotonya beserta badge-badge nya
+            const clone = heroImage.cloneNode(true);
+            clone.classList.add('foto-kontak-clone');
+            
+            // Matikan animasi transformasi bawaan framer-motion
+            clone.style.transform = 'none';
+            clone.style.opacity = '1';
+            clone.style.marginTop = '0';
+            
+            // Tempelkan ke kolom kanan
+            rightCol.appendChild(clone);
+          }
+        }
+      }, 1500); // Jeda 1.5 detik
+    });
+  </script>
+
 </head>
+
+
 <body>
   <div id="root"></div>
 </body>
