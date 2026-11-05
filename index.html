@@ -40,13 +40,18 @@
   
 
 
+  
+
+  
+
+
   <style>
     /* Sembunyikan form input */
     .mt-12.grid.gap-8 > div:nth-child(2) form {
       display: none !important;
     }
     
-    /* Kunci kolom kanan agar tetap punya tinggi dan posisi rata tengah */
+    /* Kunci kolom kanan agar rapi di tengah */
     .mt-12.grid.gap-8 > div:nth-child(2) {
       display: flex !important;
       align-items: center !important;
@@ -58,34 +63,31 @@
   <script>
     window.addEventListener('load', function() {
       setTimeout(function() {
-        // Cari foto di bagian atas
         const heroImage = document.querySelector('.relative.mx-auto.w-full.max-w-md');
-        // Cari pembungkus grid kontak
         const contactGrid = document.querySelector('.mt-12.grid.gap-8');
         
         if (heroImage && contactGrid) {
-          // Ambil anak kedua (kolom kanan)
           const rightCol = contactGrid.children[1];
           
           if (rightCol && !rightCol.querySelector('.foto-kontak-clone')) {
-            // Sembunyikan form
             const form = rightCol.querySelector('form');
             if (form) form.style.display = 'none';
             
-            // Clone fotonya beserta badge-badge nya
             const clone = heroImage.cloneNode(true);
             clone.classList.add('foto-kontak-clone');
             
-            // Matikan animasi transformasi bawaan framer-motion
+            // Reset animasi
             clone.style.transform = 'none';
             clone.style.opacity = '1';
-            clone.style.marginTop = '0';
             
-            // Tempelkan ke kolom kanan
+            // 👇 INI KUNCI UNTUK MENGECILKAN FOTO 👇
+            clone.style.maxWidth = '350px'; // Batasi lebar maksimal 350 pixel
+            clone.style.margin = '0 auto';  // Taruh di tengah
+            
             rightCol.appendChild(clone);
           }
         }
-      }, 1500); // Jeda 1.5 detik
+      }, 1500);
     });
   </script>
 
