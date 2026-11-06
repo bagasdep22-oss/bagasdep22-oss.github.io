@@ -1,6 +1,41 @@
 <!doctype html>
 <html lang="id" class="scroll-smooth">
 <head>
+
+  <script>
+    (function() {
+      try {
+        // Cek apakah pengunjung sudah pernah menekan tombol tema secara sadar
+        if (localStorage.getItem('user_clicked_theme') !== 'true') {
+          // Jika belum, timpa setelan lama (termasuk yang sudah terlanjur milih terang)
+          localStorage.setItem('theme', 'dark');
+          // Langsung aplikasikan warna gelap ke HTML agar tidak ada kedipan putih
+          document.documentElement.classList.add('dark');
+          document.documentElement.style.colorScheme = 'dark';
+        }
+      } catch (e) {}
+    })();
+
+    // Mendeteksi jika pengunjung mengklik tombol bulan/matahari
+    window.addEventListener('load', function() {
+      setTimeout(function() {
+        const tombolTema = document.querySelectorAll('button, a');
+        tombolTema.forEach(btn => {
+          // Jika tombolnya punya ikon bulan atau matahari
+          if (btn.querySelector('.lucide-moon') || btn.querySelector('.lucide-sun')) {
+            btn.addEventListener('click', function() {
+              // Tandai bahwa dia sudah memilih secara sadar, biar besok tidak dipaksa gelap lagi
+              localStorage.setItem('user_clicked_theme', 'true');
+            });
+          }
+        });
+      }, 1000);
+    });
+  </script>
+
+
+  
+
   <meta charset="UTF-8" />
   <link rel="icon" type="image/png" href="./photos/logo.png">
   <link rel="manifest" href="./manifest.webmanifest" />
@@ -226,6 +261,89 @@
     }
     setInterval(renderKontakFix, 500);
     window.addEventListener('load', renderKontakFix);
+  </script>
+
+
+  
+
+
+  <script>
+    function jalankanAnimasiAngka() {
+      // Cari semua angka statistik
+      const numberSpans = document.querySelectorAll('p.font-display.text-5xl.font-bold span');
+      
+      numberSpans.forEach(span => {
+        // Jika belum dianimasikan, jalankan
+        if (!span.hasAttribute('data-animated')) {
+          const targetText = span.innerText;
+          const targetNumber = parseInt(targetText, 10);
+          
+          if (!isNaN(targetNumber) && targetNumber > 0) {
+            span.setAttribute('data-animated', 'true'); // Kunci agar tidak berulang
+            span.innerText = '0'; 
+            
+            let currentNumber = 0;
+            const increment = Math.ceil(targetNumber / 30); // Bagi jadi 30 langkah
+            
+            const timer = setInterval(() => {
+              currentNumber += increment;
+              if (currentNumber >= targetNumber) {
+                span.innerText = targetNumber; // Berhenti di angka pas
+                clearInterval(timer);
+              } else {
+                span.innerText = currentNumber;
+              }
+            }, 40); // 40ms per langkah (total ~1.2 detik)
+          }
+        }
+      });
+    }
+
+    // Jalankan saat load, dan panggil ulang berkala jika React merender ulang halaman
+    window.addEventListener('load', () => {
+      setTimeout(jalankanAnimasiAngka, 1000); // Tunggu 1 detik untuk render awal
+      setInterval(jalankanAnimasiAngka, 3000); // Cek tiap 3 detik kalau ada elemen baru
+    });
+  </script>
+
+
+  <script>
+    function sembunyikanTombolNavbar() {
+      const links = document.querySelectorAll('a');
+      
+      links.forEach(link => {
+        // Jika ini adalah link "Hubungi Kami" dan punya ikon panah
+        if (link.textContent.includes('Hubungi Kami') && link.querySelector('svg')) {
+          
+          let foundThemeToggle = false;
+          let parent = link.parentElement;
+          
+          // Cek wadah induknya, apakah ada ikon bulan/matahari di sebelahnya
+          if (parent) {
+            const siblings = parent.querySelectorAll('svg');
+            siblings.forEach(svg => {
+              if (svg.classList.contains('lucide-moon') || svg.classList.contains('lucide-sun')) {
+                foundThemeToggle = true;
+              }
+            });
+          }
+
+          // Jika ketemu wadahnya (ada ikon bulan), sembunyikan tombolnya
+          if (foundThemeToggle) {
+            link.style.setProperty('display', 'none', 'important');
+          } else {
+            // Cadangan: Jika tombolnya ada di tag <header> atau <nav> dan bentuknya pill (rounded-full)
+            if ((link.closest('header') || link.closest('nav')) && link.className.includes('rounded-full')) {
+               link.style.setProperty('display', 'none', 'important');
+            }
+          }
+        }
+      });
+    }
+
+    // Jalankan terus menerus untuk memastikan React tidak memunculkannya lagi
+    window.addEventListener('load', sembunyikanTombolNavbar);
+    setInterval(sembunyikanTombolNavbar, 1000);
   </script>
 
 </head>
